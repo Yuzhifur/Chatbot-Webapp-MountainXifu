@@ -13,5 +13,5 @@
   "compileOnSave": true,
   "include": [
     "src"
-  ]
+, "../src/services/auth.ts"  ]
 }
