@@ -14,7 +14,7 @@ import './index.css';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyADvNFOrTIoF9_rZvAO9LWaW_05q-qqyvw",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: "mountainxifu.firebaseapp.com",
   projectId: "mountainxifu",
   storageBucket: "mountainxifu.firebasestorage.app",

@@ -80429,7 +80429,7 @@ __webpack_require__.r(__webpack_exports__);
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 var firebaseConfig = {
-    apiKey: "AIzaSyADvNFOrTIoF9_rZvAO9LWaW_05q-qqyvw",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: "mountainxifu.firebaseapp.com",
     projectId: "mountainxifu",
     storageBucket: "mountainxifu.firebasestorage.app",
@@ -80450,4 +80450,4 @@ root.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)((react__WEBPA
 
 /******/ })()
 ;
-//# sourceMappingURL=main.00c3ee6483edaf70bccb.js.map
+//# sourceMappingURL=main.07f24c106c3bf715f8fb.js.map
