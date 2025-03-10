@@ -13,9 +13,8 @@ This project is a React application with Firebase integration for authentication
    ```bash
    npm install
    ```
-3. Create a `.env` file in the project root:
-   - Copy `.env.example` to `.env`
-   - Fill in your Firebase project credentials
+3. Create a `.env.local` file in the project root:
+   - Fill in your Firebase project credentials as NEXT_PUBLIC_FIREBASE_API_KEY
 
 4. Start the development server:
    ```bash
