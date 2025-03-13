@@ -21,6 +21,13 @@ export class App extends Component<AppProps, AppState> {
   }
 
   componentDidMount() {
+    // Hide firebase welcome content when reac app mounts
+    const messageEl = document.getElementById('message');
+    const loadEl = document.getElementById('load');
+
+    if (messageEl) messageEl.style.display = 'none';
+    if (loadEl) loadEl.style.display = 'none';
+
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       this.setState({

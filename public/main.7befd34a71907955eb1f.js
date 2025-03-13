@@ -81759,6 +81759,13 @@ var App = /** @class */ (function (_super) {
     }
     App.prototype.componentDidMount = function () {
         var _this = this;
+        // Hide firebase welcome content when reac app mounts
+        var messageEl = document.getElementById('message');
+        var loadEl = document.getElementById('load');
+        if (messageEl)
+            messageEl.style.display = 'none';
+        if (loadEl)
+            loadEl.style.display = 'none';
         var auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.getAuth)();
         (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.onAuthStateChanged)(auth, function (user) {
             _this.setState({
@@ -82196,4 +82203,4 @@ root.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)((react__WEBPA
 
 /******/ })()
 ;
-//# sourceMappingURL=main.beccbb39a8eb68b7b390.js.map
+//# sourceMappingURL=main.7befd34a71907955eb1f.js.map
