@@ -25464,6 +25464,983 @@ let an = null;
 
 /***/ }),
 
+/***/ "./node_modules/@firebase/functions/dist/esm/index.esm2017.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/@firebase/functions/dist/esm/index.esm2017.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FunctionsError: () => (/* binding */ FunctionsError),
+/* harmony export */   connectFunctionsEmulator: () => (/* binding */ connectFunctionsEmulator),
+/* harmony export */   getFunctions: () => (/* binding */ getFunctions),
+/* harmony export */   httpsCallable: () => (/* binding */ httpsCallable),
+/* harmony export */   httpsCallableFromURL: () => (/* binding */ httpsCallableFromURL)
+/* harmony export */ });
+/* harmony import */ var _firebase_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @firebase/app */ "./node_modules/@firebase/app/dist/esm/index.esm2017.js");
+/* harmony import */ var _firebase_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @firebase/util */ "./node_modules/@firebase/util/dist/index.esm2017.js");
+/* harmony import */ var _firebase_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @firebase/component */ "./node_modules/@firebase/component/dist/esm/index.esm2017.js");
+
+
+
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+const LONG_TYPE = 'type.googleapis.com/google.protobuf.Int64Value';
+const UNSIGNED_LONG_TYPE = 'type.googleapis.com/google.protobuf.UInt64Value';
+function mapValues(
+// { [k: string]: unknown } is no longer a wildcard assignment target after typescript 3.5
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+o, f) {
+    const result = {};
+    for (const key in o) {
+        if (o.hasOwnProperty(key)) {
+            result[key] = f(o[key]);
+        }
+    }
+    return result;
+}
+/**
+ * Takes data and encodes it in a JSON-friendly way, such that types such as
+ * Date are preserved.
+ * @internal
+ * @param data - Data to encode.
+ */
+function encode(data) {
+    if (data == null) {
+        return null;
+    }
+    if (data instanceof Number) {
+        data = data.valueOf();
+    }
+    if (typeof data === 'number' && isFinite(data)) {
+        // Any number in JS is safe to put directly in JSON and parse as a double
+        // without any loss of precision.
+        return data;
+    }
+    if (data === true || data === false) {
+        return data;
+    }
+    if (Object.prototype.toString.call(data) === '[object String]') {
+        return data;
+    }
+    if (data instanceof Date) {
+        return data.toISOString();
+    }
+    if (Array.isArray(data)) {
+        return data.map(x => encode(x));
+    }
+    if (typeof data === 'function' || typeof data === 'object') {
+        return mapValues(data, x => encode(x));
+    }
+    // If we got this far, the data is not encodable.
+    throw new Error('Data cannot be encoded in JSON: ' + data);
+}
+/**
+ * Takes data that's been encoded in a JSON-friendly form and returns a form
+ * with richer datatypes, such as Dates, etc.
+ * @internal
+ * @param json - JSON to convert.
+ */
+function decode(json) {
+    if (json == null) {
+        return json;
+    }
+    if (json['@type']) {
+        switch (json['@type']) {
+            case LONG_TYPE:
+            // Fall through and handle this the same as unsigned.
+            case UNSIGNED_LONG_TYPE: {
+                // Technically, this could work return a valid number for malformed
+                // data if there was a number followed by garbage. But it's just not
+                // worth all the extra code to detect that case.
+                const value = Number(json['value']);
+                if (isNaN(value)) {
+                    throw new Error('Data cannot be decoded from JSON: ' + json);
+                }
+                return value;
+            }
+            default: {
+                throw new Error('Data cannot be decoded from JSON: ' + json);
+            }
+        }
+    }
+    if (Array.isArray(json)) {
+        return json.map(x => decode(x));
+    }
+    if (typeof json === 'function' || typeof json === 'object') {
+        return mapValues(json, x => decode(x));
+    }
+    // Anything else is safe to return.
+    return json;
+}
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * Type constant for Firebase Functions.
+ */
+const FUNCTIONS_TYPE = 'functions';
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * Standard error codes for different ways a request can fail, as defined by:
+ * https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto
+ *
+ * This map is used primarily to convert from a backend error code string to
+ * a client SDK error code string, and make sure it's in the supported set.
+ */
+const errorCodeMap = {
+    OK: 'ok',
+    CANCELLED: 'cancelled',
+    UNKNOWN: 'unknown',
+    INVALID_ARGUMENT: 'invalid-argument',
+    DEADLINE_EXCEEDED: 'deadline-exceeded',
+    NOT_FOUND: 'not-found',
+    ALREADY_EXISTS: 'already-exists',
+    PERMISSION_DENIED: 'permission-denied',
+    UNAUTHENTICATED: 'unauthenticated',
+    RESOURCE_EXHAUSTED: 'resource-exhausted',
+    FAILED_PRECONDITION: 'failed-precondition',
+    ABORTED: 'aborted',
+    OUT_OF_RANGE: 'out-of-range',
+    UNIMPLEMENTED: 'unimplemented',
+    INTERNAL: 'internal',
+    UNAVAILABLE: 'unavailable',
+    DATA_LOSS: 'data-loss'
+};
+/**
+ * An error returned by the Firebase Functions client SDK.
+ *
+ * See {@link FunctionsErrorCode} for full documentation of codes.
+ *
+ * @public
+ */
+class FunctionsError extends _firebase_util__WEBPACK_IMPORTED_MODULE_1__.FirebaseError {
+    /**
+     * Constructs a new instance of the `FunctionsError` class.
+     */
+    constructor(
+    /**
+     * A standard error code that will be returned to the client. This also
+     * determines the HTTP status code of the response, as defined in code.proto.
+     */
+    code, message, 
+    /**
+     * Additional details to be converted to JSON and included in the error response.
+     */
+    details) {
+        super(`${FUNCTIONS_TYPE}/${code}`, message || '');
+        this.details = details;
+        // Since the FirebaseError constructor sets the prototype of `this` to FirebaseError.prototype,
+        // we also have to do it in all subclasses to allow for correct `instanceof` checks.
+        Object.setPrototypeOf(this, FunctionsError.prototype);
+    }
+}
+/**
+ * Takes an HTTP status code and returns the corresponding ErrorCode.
+ * This is the standard HTTP status code -> error mapping defined in:
+ * https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto
+ *
+ * @param status An HTTP status code.
+ * @return The corresponding ErrorCode, or ErrorCode.UNKNOWN if none.
+ */
+function codeForHTTPStatus(status) {
+    // Make sure any successful status is OK.
+    if (status >= 200 && status < 300) {
+        return 'ok';
+    }
+    switch (status) {
+        case 0:
+            // This can happen if the server returns 500.
+            return 'internal';
+        case 400:
+            return 'invalid-argument';
+        case 401:
+            return 'unauthenticated';
+        case 403:
+            return 'permission-denied';
+        case 404:
+            return 'not-found';
+        case 409:
+            return 'aborted';
+        case 429:
+            return 'resource-exhausted';
+        case 499:
+            return 'cancelled';
+        case 500:
+            return 'internal';
+        case 501:
+            return 'unimplemented';
+        case 503:
+            return 'unavailable';
+        case 504:
+            return 'deadline-exceeded';
+    }
+    return 'unknown';
+}
+/**
+ * Takes an HTTP response and returns the corresponding Error, if any.
+ */
+function _errorForResponse(status, bodyJSON) {
+    let code = codeForHTTPStatus(status);
+    // Start with reasonable defaults from the status code.
+    let description = code;
+    let details = undefined;
+    // Then look through the body for explicit details.
+    try {
+        const errorJSON = bodyJSON && bodyJSON.error;
+        if (errorJSON) {
+            const status = errorJSON.status;
+            if (typeof status === 'string') {
+                if (!errorCodeMap[status]) {
+                    // They must've included an unknown error code in the body.
+                    return new FunctionsError('internal', 'internal');
+                }
+                code = errorCodeMap[status];
+                // TODO(klimt): Add better default descriptions for error enums.
+                // The default description needs to be updated for the new code.
+                description = status;
+            }
+            const message = errorJSON.message;
+            if (typeof message === 'string') {
+                description = message;
+            }
+            details = errorJSON.details;
+            if (details !== undefined) {
+                details = decode(details);
+            }
+        }
+    }
+    catch (e) {
+        // If we couldn't parse explicit error data, that's fine.
+    }
+    if (code === 'ok') {
+        // Technically, there's an edge case where a developer could explicitly
+        // return an error code of OK, and we will treat it as success, but that
+        // seems reasonable.
+        return null;
+    }
+    return new FunctionsError(code, description, details);
+}
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * Helper class to get metadata that should be included with a function call.
+ * @internal
+ */
+class ContextProvider {
+    constructor(app, authProvider, messagingProvider, appCheckProvider) {
+        this.app = app;
+        this.auth = null;
+        this.messaging = null;
+        this.appCheck = null;
+        this.serverAppAppCheckToken = null;
+        if ((0,_firebase_app__WEBPACK_IMPORTED_MODULE_0__._isFirebaseServerApp)(app) && app.settings.appCheckToken) {
+            this.serverAppAppCheckToken = app.settings.appCheckToken;
+        }
+        this.auth = authProvider.getImmediate({ optional: true });
+        this.messaging = messagingProvider.getImmediate({
+            optional: true
+        });
+        if (!this.auth) {
+            authProvider.get().then(auth => (this.auth = auth), () => {
+                /* get() never rejects */
+            });
+        }
+        if (!this.messaging) {
+            messagingProvider.get().then(messaging => (this.messaging = messaging), () => {
+                /* get() never rejects */
+            });
+        }
+        if (!this.appCheck) {
+            appCheckProvider === null || appCheckProvider === void 0 ? void 0 : appCheckProvider.get().then(appCheck => (this.appCheck = appCheck), () => {
+                /* get() never rejects */
+            });
+        }
+    }
+    async getAuthToken() {
+        if (!this.auth) {
+            return undefined;
+        }
+        try {
+            const token = await this.auth.getToken();
+            return token === null || token === void 0 ? void 0 : token.accessToken;
+        }
+        catch (e) {
+            // If there's any error when trying to get the auth token, leave it off.
+            return undefined;
+        }
+    }
+    async getMessagingToken() {
+        if (!this.messaging ||
+            !('Notification' in self) ||
+            Notification.permission !== 'granted') {
+            return undefined;
+        }
+        try {
+            return await this.messaging.getToken();
+        }
+        catch (e) {
+            // We don't warn on this, because it usually means messaging isn't set up.
+            // console.warn('Failed to retrieve instance id token.', e);
+            // If there's any error when trying to get the token, leave it off.
+            return undefined;
+        }
+    }
+    async getAppCheckToken(limitedUseAppCheckTokens) {
+        if (this.serverAppAppCheckToken) {
+            return this.serverAppAppCheckToken;
+        }
+        if (this.appCheck) {
+            const result = limitedUseAppCheckTokens
+                ? await this.appCheck.getLimitedUseToken()
+                : await this.appCheck.getToken();
+            if (result.error) {
+                // Do not send the App Check header to the functions endpoint if
+                // there was an error from the App Check exchange endpoint. The App
+                // Check SDK will already have logged the error to console.
+                return null;
+            }
+            return result.token;
+        }
+        return null;
+    }
+    async getContext(limitedUseAppCheckTokens) {
+        const authToken = await this.getAuthToken();
+        const messagingToken = await this.getMessagingToken();
+        const appCheckToken = await this.getAppCheckToken(limitedUseAppCheckTokens);
+        return { authToken, messagingToken, appCheckToken };
+    }
+}
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+const DEFAULT_REGION = 'us-central1';
+const responseLineRE = /^data: (.*?)(?:\n|$)/;
+/**
+ * Returns a Promise that will be rejected after the given duration.
+ * The error will be of type FunctionsError.
+ *
+ * @param millis Number of milliseconds to wait before rejecting.
+ */
+function failAfter(millis) {
+    // Node timers and browser timers are fundamentally incompatible, but we
+    // don't care about the value here
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let timer = null;
+    return {
+        promise: new Promise((_, reject) => {
+            timer = setTimeout(() => {
+                reject(new FunctionsError('deadline-exceeded', 'deadline-exceeded'));
+            }, millis);
+        }),
+        cancel: () => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+        }
+    };
+}
+/**
+ * The main class for the Firebase Functions SDK.
+ * @internal
+ */
+class FunctionsService {
+    /**
+     * Creates a new Functions service for the given app.
+     * @param app - The FirebaseApp to use.
+     */
+    constructor(app, authProvider, messagingProvider, appCheckProvider, regionOrCustomDomain = DEFAULT_REGION, fetchImpl = (...args) => fetch(...args)) {
+        this.app = app;
+        this.fetchImpl = fetchImpl;
+        this.emulatorOrigin = null;
+        this.contextProvider = new ContextProvider(app, authProvider, messagingProvider, appCheckProvider);
+        // Cancels all ongoing requests when resolved.
+        this.cancelAllRequests = new Promise(resolve => {
+            this.deleteService = () => {
+                return Promise.resolve(resolve());
+            };
+        });
+        // Resolve the region or custom domain overload by attempting to parse it.
+        try {
+            const url = new URL(regionOrCustomDomain);
+            this.customDomain =
+                url.origin + (url.pathname === '/' ? '' : url.pathname);
+            this.region = DEFAULT_REGION;
+        }
+        catch (e) {
+            this.customDomain = null;
+            this.region = regionOrCustomDomain;
+        }
+    }
+    _delete() {
+        return this.deleteService();
+    }
+    /**
+     * Returns the URL for a callable with the given name.
+     * @param name - The name of the callable.
+     * @internal
+     */
+    _url(name) {
+        const projectId = this.app.options.projectId;
+        if (this.emulatorOrigin !== null) {
+            const origin = this.emulatorOrigin;
+            return `${origin}/${projectId}/${this.region}/${name}`;
+        }
+        if (this.customDomain !== null) {
+            return `${this.customDomain}/${name}`;
+        }
+        return `https://${this.region}-${projectId}.cloudfunctions.net/${name}`;
+    }
+}
+/**
+ * Modify this instance to communicate with the Cloud Functions emulator.
+ *
+ * Note: this must be called before this instance has been used to do any operations.
+ *
+ * @param host The emulator host (ex: localhost)
+ * @param port The emulator port (ex: 5001)
+ * @public
+ */
+function connectFunctionsEmulator$1(functionsInstance, host, port) {
+    functionsInstance.emulatorOrigin = `http://${host}:${port}`;
+}
+/**
+ * Returns a reference to the callable https trigger with the given name.
+ * @param name - The name of the trigger.
+ * @public
+ */
+function httpsCallable$1(functionsInstance, name, options) {
+    const callable = (data) => {
+        return call(functionsInstance, name, data, options || {});
+    };
+    callable.stream = (data, options) => {
+        return stream(functionsInstance, name, data, options);
+    };
+    return callable;
+}
+/**
+ * Returns a reference to the callable https trigger with the given url.
+ * @param url - The url of the trigger.
+ * @public
+ */
+function httpsCallableFromURL$1(functionsInstance, url, options) {
+    const callable = (data) => {
+        return callAtURL(functionsInstance, url, data, options || {});
+    };
+    callable.stream = (data, options) => {
+        return streamAtURL(functionsInstance, url, data, options || {});
+    };
+    return callable;
+}
+/**
+ * Does an HTTP POST and returns the completed response.
+ * @param url The url to post to.
+ * @param body The JSON body of the post.
+ * @param headers The HTTP headers to include in the request.
+ * @return A Promise that will succeed when the request finishes.
+ */
+async function postJSON(url, body, headers, fetchImpl) {
+    headers['Content-Type'] = 'application/json';
+    let response;
+    try {
+        response = await fetchImpl(url, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers
+        });
+    }
+    catch (e) {
+        // This could be an unhandled error on the backend, or it could be a
+        // network error. There's no way to know, since an unhandled error on the
+        // backend will fail to set the proper CORS header, and thus will be
+        // treated as a network error by fetch.
+        return {
+            status: 0,
+            json: null
+        };
+    }
+    let json = null;
+    try {
+        json = await response.json();
+    }
+    catch (e) {
+        // If we fail to parse JSON, it will fail the same as an empty body.
+    }
+    return {
+        status: response.status,
+        json
+    };
+}
+/**
+ * Creates authorization headers for Firebase Functions requests.
+ * @param functionsInstance The Firebase Functions service instance.
+ * @param options Options for the callable function, including AppCheck token settings.
+ * @return A Promise that resolves a headers map to include in outgoing fetch request.
+ */
+async function makeAuthHeaders(functionsInstance, options) {
+    const headers = {};
+    const context = await functionsInstance.contextProvider.getContext(options.limitedUseAppCheckTokens);
+    if (context.authToken) {
+        headers['Authorization'] = 'Bearer ' + context.authToken;
+    }
+    if (context.messagingToken) {
+        headers['Firebase-Instance-ID-Token'] = context.messagingToken;
+    }
+    if (context.appCheckToken !== null) {
+        headers['X-Firebase-AppCheck'] = context.appCheckToken;
+    }
+    return headers;
+}
+/**
+ * Calls a callable function asynchronously and returns the result.
+ * @param name The name of the callable trigger.
+ * @param data The data to pass as params to the function.
+ */
+function call(functionsInstance, name, data, options) {
+    const url = functionsInstance._url(name);
+    return callAtURL(functionsInstance, url, data, options);
+}
+/**
+ * Calls a callable function asynchronously and returns the result.
+ * @param url The url of the callable trigger.
+ * @param data The data to pass as params to the function.
+ */
+async function callAtURL(functionsInstance, url, data, options) {
+    // Encode any special types, such as dates, in the input data.
+    data = encode(data);
+    const body = { data };
+    // Add a header for the authToken.
+    const headers = await makeAuthHeaders(functionsInstance, options);
+    // Default timeout to 70s, but let the options override it.
+    const timeout = options.timeout || 70000;
+    const failAfterHandle = failAfter(timeout);
+    const response = await Promise.race([
+        postJSON(url, body, headers, functionsInstance.fetchImpl),
+        failAfterHandle.promise,
+        functionsInstance.cancelAllRequests
+    ]);
+    // Always clear the failAfter timeout
+    failAfterHandle.cancel();
+    // If service was deleted, interrupted response throws an error.
+    if (!response) {
+        throw new FunctionsError('cancelled', 'Firebase Functions instance was deleted.');
+    }
+    // Check for an error status, regardless of http status.
+    const error = _errorForResponse(response.status, response.json);
+    if (error) {
+        throw error;
+    }
+    if (!response.json) {
+        throw new FunctionsError('internal', 'Response is not valid JSON object.');
+    }
+    let responseData = response.json.data;
+    // TODO(klimt): For right now, allow "result" instead of "data", for
+    // backwards compatibility.
+    if (typeof responseData === 'undefined') {
+        responseData = response.json.result;
+    }
+    if (typeof responseData === 'undefined') {
+        // Consider the response malformed.
+        throw new FunctionsError('internal', 'Response is missing data field.');
+    }
+    // Decode any special types, such as dates, in the returned data.
+    const decodedData = decode(responseData);
+    return { data: decodedData };
+}
+/**
+ * Calls a callable function asynchronously and returns a streaming result.
+ * @param name The name of the callable trigger.
+ * @param data The data to pass as params to the function.
+ * @param options Streaming request options.
+ */
+function stream(functionsInstance, name, data, options) {
+    const url = functionsInstance._url(name);
+    return streamAtURL(functionsInstance, url, data, options || {});
+}
+/**
+ * Calls a callable function asynchronously and return a streaming result.
+ * @param url The url of the callable trigger.
+ * @param data The data to pass as params to the function.
+ * @param options Streaming request options.
+ */
+async function streamAtURL(functionsInstance, url, data, options) {
+    var _a;
+    // Encode any special types, such as dates, in the input data.
+    data = encode(data);
+    const body = { data };
+    //
+    // Add a header for the authToken.
+    const headers = await makeAuthHeaders(functionsInstance, options);
+    headers['Content-Type'] = 'application/json';
+    headers['Accept'] = 'text/event-stream';
+    let response;
+    try {
+        response = await functionsInstance.fetchImpl(url, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers,
+            signal: options === null || options === void 0 ? void 0 : options.signal
+        });
+    }
+    catch (e) {
+        if (e instanceof Error && e.name === 'AbortError') {
+            const error = new FunctionsError('cancelled', 'Request was cancelled.');
+            return {
+                data: Promise.reject(error),
+                stream: {
+                    [Symbol.asyncIterator]() {
+                        return {
+                            next() {
+                                return Promise.reject(error);
+                            }
+                        };
+                    }
+                }
+            };
+        }
+        // This could be an unhandled error on the backend, or it could be a
+        // network error. There's no way to know, since an unhandled error on the
+        // backend will fail to set the proper CORS header, and thus will be
+        // treated as a network error by fetch.
+        const error = _errorForResponse(0, null);
+        return {
+            data: Promise.reject(error),
+            // Return an empty async iterator
+            stream: {
+                [Symbol.asyncIterator]() {
+                    return {
+                        next() {
+                            return Promise.reject(error);
+                        }
+                    };
+                }
+            }
+        };
+    }
+    let resultResolver;
+    let resultRejecter;
+    const resultPromise = new Promise((resolve, reject) => {
+        resultResolver = resolve;
+        resultRejecter = reject;
+    });
+    (_a = options === null || options === void 0 ? void 0 : options.signal) === null || _a === void 0 ? void 0 : _a.addEventListener('abort', () => {
+        const error = new FunctionsError('cancelled', 'Request was cancelled.');
+        resultRejecter(error);
+    });
+    const reader = response.body.getReader();
+    const rstream = createResponseStream(reader, resultResolver, resultRejecter, options === null || options === void 0 ? void 0 : options.signal);
+    return {
+        stream: {
+            [Symbol.asyncIterator]() {
+                const rreader = rstream.getReader();
+                return {
+                    async next() {
+                        const { value, done } = await rreader.read();
+                        return { value: value, done };
+                    },
+                    async return() {
+                        await rreader.cancel();
+                        return { done: true, value: undefined };
+                    }
+                };
+            }
+        },
+        data: resultPromise
+    };
+}
+/**
+ * Creates a ReadableStream that processes a streaming response from a streaming
+ * callable function that returns data in server-sent event format.
+ *
+ * @param reader The underlying reader providing raw response data
+ * @param resultResolver Callback to resolve the final result when received
+ * @param resultRejecter Callback to reject with an error if encountered
+ * @param signal Optional AbortSignal to cancel the stream processing
+ * @returns A ReadableStream that emits decoded messages from the response
+ *
+ * The returned ReadableStream:
+ *   1. Emits individual messages when "message" data is received
+ *   2. Resolves with the final result when a "result" message is received
+ *   3. Rejects with an error if an "error" message is received
+ */
+function createResponseStream(reader, resultResolver, resultRejecter, signal) {
+    const processLine = (line, controller) => {
+        const match = line.match(responseLineRE);
+        // ignore all other lines (newline, comments, etc.)
+        if (!match) {
+            return;
+        }
+        const data = match[1];
+        try {
+            const jsonData = JSON.parse(data);
+            if ('result' in jsonData) {
+                resultResolver(decode(jsonData.result));
+                return;
+            }
+            if ('message' in jsonData) {
+                controller.enqueue(decode(jsonData.message));
+                return;
+            }
+            if ('error' in jsonData) {
+                const error = _errorForResponse(0, jsonData);
+                controller.error(error);
+                resultRejecter(error);
+                return;
+            }
+        }
+        catch (error) {
+            if (error instanceof FunctionsError) {
+                controller.error(error);
+                resultRejecter(error);
+                return;
+            }
+            // ignore other parsing errors
+        }
+    };
+    const decoder = new TextDecoder();
+    return new ReadableStream({
+        start(controller) {
+            let currentText = '';
+            return pump();
+            async function pump() {
+                if (signal === null || signal === void 0 ? void 0 : signal.aborted) {
+                    const error = new FunctionsError('cancelled', 'Request was cancelled');
+                    controller.error(error);
+                    resultRejecter(error);
+                    return Promise.resolve();
+                }
+                try {
+                    const { value, done } = await reader.read();
+                    if (done) {
+                        if (currentText.trim()) {
+                            processLine(currentText.trim(), controller);
+                        }
+                        controller.close();
+                        return;
+                    }
+                    if (signal === null || signal === void 0 ? void 0 : signal.aborted) {
+                        const error = new FunctionsError('cancelled', 'Request was cancelled');
+                        controller.error(error);
+                        resultRejecter(error);
+                        await reader.cancel();
+                        return;
+                    }
+                    currentText += decoder.decode(value, { stream: true });
+                    const lines = currentText.split('\n');
+                    currentText = lines.pop() || '';
+                    for (const line of lines) {
+                        if (line.trim()) {
+                            processLine(line.trim(), controller);
+                        }
+                    }
+                    return pump();
+                }
+                catch (error) {
+                    const functionsError = error instanceof FunctionsError
+                        ? error
+                        : _errorForResponse(0, null);
+                    controller.error(functionsError);
+                    resultRejecter(functionsError);
+                }
+            }
+        },
+        cancel() {
+            return reader.cancel();
+        }
+    });
+}
+
+const name = "@firebase/functions";
+const version = "0.12.3";
+
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+const AUTH_INTERNAL_NAME = 'auth-internal';
+const APP_CHECK_INTERNAL_NAME = 'app-check-internal';
+const MESSAGING_INTERNAL_NAME = 'messaging-internal';
+function registerFunctions(variant) {
+    const factory = (container, { instanceIdentifier: regionOrCustomDomain }) => {
+        // Dependencies
+        const app = container.getProvider('app').getImmediate();
+        const authProvider = container.getProvider(AUTH_INTERNAL_NAME);
+        const messagingProvider = container.getProvider(MESSAGING_INTERNAL_NAME);
+        const appCheckProvider = container.getProvider(APP_CHECK_INTERNAL_NAME);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return new FunctionsService(app, authProvider, messagingProvider, appCheckProvider, regionOrCustomDomain);
+    };
+    (0,_firebase_app__WEBPACK_IMPORTED_MODULE_0__._registerComponent)(new _firebase_component__WEBPACK_IMPORTED_MODULE_2__.Component(FUNCTIONS_TYPE, factory, "PUBLIC" /* ComponentType.PUBLIC */).setMultipleInstances(true));
+    (0,_firebase_app__WEBPACK_IMPORTED_MODULE_0__.registerVersion)(name, version, variant);
+    // BUILD_TARGET will be replaced by values like esm2017, cjs2017, etc during the compilation
+    (0,_firebase_app__WEBPACK_IMPORTED_MODULE_0__.registerVersion)(name, version, 'esm2017');
+}
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * Returns a {@link Functions} instance for the given app.
+ * @param app - The {@link @firebase/app#FirebaseApp} to use.
+ * @param regionOrCustomDomain - one of:
+ *   a) The region the callable functions are located in (ex: us-central1)
+ *   b) A custom domain hosting the callable functions (ex: https://mydomain.com)
+ * @public
+ */
+function getFunctions(app = (0,_firebase_app__WEBPACK_IMPORTED_MODULE_0__.getApp)(), regionOrCustomDomain = DEFAULT_REGION) {
+    // Dependencies
+    const functionsProvider = (0,_firebase_app__WEBPACK_IMPORTED_MODULE_0__._getProvider)((0,_firebase_util__WEBPACK_IMPORTED_MODULE_1__.getModularInstance)(app), FUNCTIONS_TYPE);
+    const functionsInstance = functionsProvider.getImmediate({
+        identifier: regionOrCustomDomain
+    });
+    const emulator = (0,_firebase_util__WEBPACK_IMPORTED_MODULE_1__.getDefaultEmulatorHostnameAndPort)('functions');
+    if (emulator) {
+        connectFunctionsEmulator(functionsInstance, ...emulator);
+    }
+    return functionsInstance;
+}
+/**
+ * Modify this instance to communicate with the Cloud Functions emulator.
+ *
+ * Note: this must be called before this instance has been used to do any operations.
+ *
+ * @param host - The emulator host (ex: localhost)
+ * @param port - The emulator port (ex: 5001)
+ * @public
+ */
+function connectFunctionsEmulator(functionsInstance, host, port) {
+    connectFunctionsEmulator$1((0,_firebase_util__WEBPACK_IMPORTED_MODULE_1__.getModularInstance)(functionsInstance), host, port);
+}
+/**
+ * Returns a reference to the callable HTTPS trigger with the given name.
+ * @param name - The name of the trigger.
+ * @public
+ */
+function httpsCallable(functionsInstance, name, options) {
+    return httpsCallable$1((0,_firebase_util__WEBPACK_IMPORTED_MODULE_1__.getModularInstance)(functionsInstance), name, options);
+}
+/**
+ * Returns a reference to the callable HTTPS trigger with the specified url.
+ * @param url - The url of the trigger.
+ * @public
+ */
+function httpsCallableFromURL(functionsInstance, url, options) {
+    return httpsCallableFromURL$1((0,_firebase_util__WEBPACK_IMPORTED_MODULE_1__.getModularInstance)(functionsInstance), url, options);
+}
+
+/**
+ * Cloud Functions for Firebase
+ *
+ * @packageDocumentation
+ */
+registerFunctions();
+
+
+//# sourceMappingURL=index.esm2017.js.map
+
+
+/***/ }),
+
 /***/ "./node_modules/@firebase/installations/dist/esm/index.esm2017.js":
 /*!************************************************************************!*\
   !*** ./node_modules/@firebase/installations/dist/esm/index.esm2017.js ***!
@@ -31162,10 +32139,10 @@ const getDefaultsFromGlobal = () => getGlobal().__FIREBASE_DEFAULTS__;
  * See https://github.com/firebase/firebase-js-sdk/issues/6838
  */
 const getDefaultsFromEnvVariable = () => {
-    if (typeof process === 'undefined' || typeof process.env === 'undefined') {
+    if (typeof process === 'undefined' || "string" === 'undefined') {
         return;
     }
-    const defaultsJsonString = process.env.__FIREBASE_DEFAULTS__;
+    const defaultsJsonString = "MISSING_ENV_VAR".__FIREBASE_DEFAULTS__;
     if (defaultsJsonString) {
         return JSON.parse(defaultsJsonString);
     }
@@ -32953,6 +33930,352 @@ X.prototype.send=X.prototype.ea;X.prototype.setWithCredentials=X.prototype.Ha;Xh
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/App.css":
+/*!***********************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/App.css ***!
+  \***********************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/sourceMaps.js */ "./node_modules/css-loader/dist/runtime/sourceMaps.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, `* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+  color: #666;
+}
+
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.dashboard h1 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.logout-button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;
+}`, "",{"version":3,"sources":["webpack://./src/App.css"],"names":[],"mappings":"AAAA;EACE,sBAAsB;EACtB,SAAS;EACT,UAAU;AACZ;;AAEA;EACE,8BAA8B;AAChC;;AAEA;EACE,iBAAiB;AACnB;;AAEA;EACE,aAAa;EACb,uBAAuB;EACvB,mBAAmB;EACnB,aAAa;EACb,eAAe;EACf,WAAW;AACb;;AAEA;EACE,iBAAiB;EACjB,cAAc;EACd,kBAAkB;AACpB;;AAEA;EACE,mBAAmB;EACnB,WAAW;AACb;;AAEA;EACE,gBAAgB;EAChB,iBAAiB;EACjB,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,yBAAyB;AAC3B","sourcesContent":["* {\r\n  box-sizing: border-box;\r\n  margin: 0;\r\n  padding: 0;\r\n}\r\n\r\nbody {\r\n  font-family: Arial, sans-serif;\r\n}\r\n\r\n.app {\r\n  min-height: 100vh;\r\n}\r\n\r\n.loading {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  height: 100vh;\r\n  font-size: 18px;\r\n  color: #666;\r\n}\r\n\r\n.dashboard {\r\n  max-width: 1200px;\r\n  margin: 0 auto;\r\n  padding: 40px 20px;\r\n}\r\n\r\n.dashboard h1 {\r\n  margin-bottom: 20px;\r\n  color: #333;\r\n}\r\n\r\n.logout-button {\r\n  margin-top: 20px;\r\n  padding: 8px 16px;\r\n  background-color: #f44336;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 4px;\r\n  cursor: pointer;\r\n  font-size: 14px;\r\n}\r\n\r\n.logout-button:hover {\r\n  background-color: #d32f2f;\r\n}"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/components/Login.css":
+/*!************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/components/Login.css ***!
+  \************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/sourceMaps.js */ "./node_modules/css-loader/dist/runtime/sourceMaps.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, `.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f7f7f7;
+}
+
+.login-form-wrapper {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.login-subtitle {
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #666;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-field {
+  margin-bottom: 20px;
+}
+
+.login-field label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #555;
+}
+
+.login-field input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.login-field input:focus {
+  border-color: #666;
+  outline: none;
+}
+
+.login-button {
+  padding: 12px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-button:hover {
+  background-color: #3367d6;
+}
+
+.login-button:disabled {
+  background-color: #b3c6e6;
+  cursor: not-allowed;
+}
+
+.login-error {
+  color: #d93025;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 14px;
+  background-color: #fce8e6;
+  padding: 10px;
+  border-radius: 4px;
+}`, "",{"version":3,"sources":["webpack://./src/components/Login.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,uBAAuB;EACvB,mBAAmB;EACnB,iBAAiB;EACjB,yBAAyB;AAC3B;;AAEA;EACE,WAAW;EACX,gBAAgB;EAChB,aAAa;EACb,uBAAuB;EACvB,kBAAkB;EAClB,wCAAwC;AAC1C;;AAEA;EACE,eAAe;EACf,iBAAiB;EACjB,kBAAkB;EAClB,mBAAmB;EACnB,WAAW;AACb;;AAEA;EACE,eAAe;EACf,kBAAkB;EAClB,mBAAmB;EACnB,WAAW;AACb;;AAEA;EACE,aAAa;EACb,sBAAsB;AACxB;;AAEA;EACE,mBAAmB;AACrB;;AAEA;EACE,cAAc;EACd,kBAAkB;EAClB,gBAAgB;EAChB,WAAW;AACb;;AAEA;EACE,WAAW;EACX,aAAa;EACb,sBAAsB;EACtB,kBAAkB;EAClB,eAAe;AACjB;;AAEA;EACE,kBAAkB;EAClB,aAAa;AACf;;AAEA;EACE,aAAa;EACb,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,eAAe;EACf,gBAAgB;EAChB,eAAe;EACf,iCAAiC;AACnC;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,yBAAyB;EACzB,mBAAmB;AACrB;;AAEA;EACE,cAAc;EACd,mBAAmB;EACnB,kBAAkB;EAClB,eAAe;EACf,yBAAyB;EACzB,aAAa;EACb,kBAAkB;AACpB","sourcesContent":[".login-container {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  min-height: 100vh;\r\n  background-color: #f7f7f7;\r\n}\r\n\r\n.login-form-wrapper {\r\n  width: 100%;\r\n  max-width: 400px;\r\n  padding: 40px;\r\n  background-color: white;\r\n  border-radius: 8px;\r\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.login-title {\r\n  font-size: 28px;\r\n  font-weight: bold;\r\n  text-align: center;\r\n  margin-bottom: 10px;\r\n  color: #333;\r\n}\r\n\r\n.login-subtitle {\r\n  font-size: 18px;\r\n  text-align: center;\r\n  margin-bottom: 30px;\r\n  color: #666;\r\n}\r\n\r\n.login-form {\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\n.login-field {\r\n  margin-bottom: 20px;\r\n}\r\n\r\n.login-field label {\r\n  display: block;\r\n  margin-bottom: 5px;\r\n  font-weight: 500;\r\n  color: #555;\r\n}\r\n\r\n.login-field input {\r\n  width: 100%;\r\n  padding: 10px;\r\n  border: 1px solid #ddd;\r\n  border-radius: 4px;\r\n  font-size: 16px;\r\n}\r\n\r\n.login-field input:focus {\r\n  border-color: #666;\r\n  outline: none;\r\n}\r\n\r\n.login-button {\r\n  padding: 12px;\r\n  background-color: #4285f4;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 4px;\r\n  font-size: 16px;\r\n  font-weight: 500;\r\n  cursor: pointer;\r\n  transition: background-color 0.2s;\r\n}\r\n\r\n.login-button:hover {\r\n  background-color: #3367d6;\r\n}\r\n\r\n.login-button:disabled {\r\n  background-color: #b3c6e6;\r\n  cursor: not-allowed;\r\n}\r\n\r\n.login-error {\r\n  color: #d93025;\r\n  margin-bottom: 20px;\r\n  text-align: center;\r\n  font-size: 14px;\r\n  background-color: #fce8e6;\r\n  padding: 10px;\r\n  border-radius: 4px;\r\n}"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/index.css":
+/*!*************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/index.css ***!
+  \*************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/sourceMaps.js */ "./node_modules/css-loader/dist/runtime/sourceMaps.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, `body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}`, "",{"version":3,"sources":["webpack://./src/index.css"],"names":[],"mappings":"AAAA;EACE,SAAS;EACT;;cAEY;EACZ,mCAAmC;EACnC,kCAAkC;AACpC;;AAEA;EACE;aACW;AACb","sourcesContent":["body {\r\n  margin: 0;\r\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\r\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\ncode {\r\n  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',\r\n    monospace;\r\n}"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/runtime/api.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/api.js ***!
+  \*****************************************************/
+/***/ ((module) => {
+
+
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+module.exports = function (cssWithMappingToString) {
+  var list = [];
+
+  // return the list of modules as css string
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = "";
+      var needLayer = typeof item[5] !== "undefined";
+      if (item[4]) {
+        content += "@supports (".concat(item[4], ") {");
+      }
+      if (item[2]) {
+        content += "@media ".concat(item[2], " {");
+      }
+      if (needLayer) {
+        content += "@layer".concat(item[5].length > 0 ? " ".concat(item[5]) : "", " {");
+      }
+      content += cssWithMappingToString(item);
+      if (needLayer) {
+        content += "}";
+      }
+      if (item[2]) {
+        content += "}";
+      }
+      if (item[4]) {
+        content += "}";
+      }
+      return content;
+    }).join("");
+  };
+
+  // import a list of modules into the list
+  list.i = function i(modules, media, dedupe, supports, layer) {
+    if (typeof modules === "string") {
+      modules = [[null, modules, undefined]];
+    }
+    var alreadyImportedModules = {};
+    if (dedupe) {
+      for (var k = 0; k < this.length; k++) {
+        var id = this[k][0];
+        if (id != null) {
+          alreadyImportedModules[id] = true;
+        }
+      }
+    }
+    for (var _k = 0; _k < modules.length; _k++) {
+      var item = [].concat(modules[_k]);
+      if (dedupe && alreadyImportedModules[item[0]]) {
+        continue;
+      }
+      if (typeof layer !== "undefined") {
+        if (typeof item[5] === "undefined") {
+          item[5] = layer;
+        } else {
+          item[1] = "@layer".concat(item[5].length > 0 ? " ".concat(item[5]) : "", " {").concat(item[1], "}");
+          item[5] = layer;
+        }
+      }
+      if (media) {
+        if (!item[2]) {
+          item[2] = media;
+        } else {
+          item[1] = "@media ".concat(item[2], " {").concat(item[1], "}");
+          item[2] = media;
+        }
+      }
+      if (supports) {
+        if (!item[4]) {
+          item[4] = "".concat(supports);
+        } else {
+          item[1] = "@supports (".concat(item[4], ") {").concat(item[1], "}");
+          item[4] = supports;
+        }
+      }
+      list.push(item);
+    }
+  };
+  return list;
+};
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/runtime/sourceMaps.js":
+/*!************************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/sourceMaps.js ***!
+  \************************************************************/
+/***/ ((module) => {
+
+
+
+module.exports = function (item) {
+  var content = item[1];
+  var cssMapping = item[3];
+  if (!cssMapping) {
+    return content;
+  }
+  if (typeof btoa === "function") {
+    var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(cssMapping))));
+    var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
+    var sourceMapping = "/*# ".concat(data, " */");
+    return [content].concat([sourceMapping]).join("\n");
+  }
+  return [content].join("\n");
+};
+
+/***/ }),
+
 /***/ "./node_modules/firebase/analytics/dist/esm/index.esm.js":
 /*!***************************************************************!*\
   !*** ./node_modules/firebase/analytics/dist/esm/index.esm.js ***!
@@ -33267,6 +34590,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   writeBatch: () => (/* reexport safe */ _firebase_firestore__WEBPACK_IMPORTED_MODULE_0__.writeBatch)
 /* harmony export */ });
 /* harmony import */ var _firebase_firestore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @firebase/firestore */ "./node_modules/@firebase/firestore/dist/index.esm2017.js");
+
+//# sourceMappingURL=index.esm.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/firebase/functions/dist/esm/index.esm.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/firebase/functions/dist/esm/index.esm.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FunctionsError: () => (/* reexport safe */ _firebase_functions__WEBPACK_IMPORTED_MODULE_0__.FunctionsError),
+/* harmony export */   connectFunctionsEmulator: () => (/* reexport safe */ _firebase_functions__WEBPACK_IMPORTED_MODULE_0__.connectFunctionsEmulator),
+/* harmony export */   getFunctions: () => (/* reexport safe */ _firebase_functions__WEBPACK_IMPORTED_MODULE_0__.getFunctions),
+/* harmony export */   httpsCallable: () => (/* reexport safe */ _firebase_functions__WEBPACK_IMPORTED_MODULE_0__.httpsCallable),
+/* harmony export */   httpsCallableFromURL: () => (/* reexport safe */ _firebase_functions__WEBPACK_IMPORTED_MODULE_0__.httpsCallableFromURL)
+/* harmony export */ });
+/* harmony import */ var _firebase_functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @firebase/functions */ "./node_modules/@firebase/functions/dist/esm/index.esm2017.js");
 
 //# sourceMappingURL=index.esm.js.map
 
@@ -79589,6 +80933,273 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
+  \****************************************************************************/
+/***/ ((module) => {
+
+
+
+var stylesInDOM = [];
+function getIndexByIdentifier(identifier) {
+  var result = -1;
+  for (var i = 0; i < stylesInDOM.length; i++) {
+    if (stylesInDOM[i].identifier === identifier) {
+      result = i;
+      break;
+    }
+  }
+  return result;
+}
+function modulesToDom(list, options) {
+  var idCountMap = {};
+  var identifiers = [];
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i];
+    var id = options.base ? item[0] + options.base : item[0];
+    var count = idCountMap[id] || 0;
+    var identifier = "".concat(id, " ").concat(count);
+    idCountMap[id] = count + 1;
+    var indexByIdentifier = getIndexByIdentifier(identifier);
+    var obj = {
+      css: item[1],
+      media: item[2],
+      sourceMap: item[3],
+      supports: item[4],
+      layer: item[5]
+    };
+    if (indexByIdentifier !== -1) {
+      stylesInDOM[indexByIdentifier].references++;
+      stylesInDOM[indexByIdentifier].updater(obj);
+    } else {
+      var updater = addElementStyle(obj, options);
+      options.byIndex = i;
+      stylesInDOM.splice(i, 0, {
+        identifier: identifier,
+        updater: updater,
+        references: 1
+      });
+    }
+    identifiers.push(identifier);
+  }
+  return identifiers;
+}
+function addElementStyle(obj, options) {
+  var api = options.domAPI(options);
+  api.update(obj);
+  var updater = function updater(newObj) {
+    if (newObj) {
+      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap && newObj.supports === obj.supports && newObj.layer === obj.layer) {
+        return;
+      }
+      api.update(obj = newObj);
+    } else {
+      api.remove();
+    }
+  };
+  return updater;
+}
+module.exports = function (list, options) {
+  options = options || {};
+  list = list || [];
+  var lastIdentifiers = modulesToDom(list, options);
+  return function update(newList) {
+    newList = newList || [];
+    for (var i = 0; i < lastIdentifiers.length; i++) {
+      var identifier = lastIdentifiers[i];
+      var index = getIndexByIdentifier(identifier);
+      stylesInDOM[index].references--;
+    }
+    var newLastIdentifiers = modulesToDom(newList, options);
+    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
+      var _identifier = lastIdentifiers[_i];
+      var _index = getIndexByIdentifier(_identifier);
+      if (stylesInDOM[_index].references === 0) {
+        stylesInDOM[_index].updater();
+        stylesInDOM.splice(_index, 1);
+      }
+    }
+    lastIdentifiers = newLastIdentifiers;
+  };
+};
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/runtime/insertBySelector.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/insertBySelector.js ***!
+  \********************************************************************/
+/***/ ((module) => {
+
+
+
+var memo = {};
+
+/* istanbul ignore next  */
+function getTarget(target) {
+  if (typeof memo[target] === "undefined") {
+    var styleTarget = document.querySelector(target);
+
+    // Special case to return head of iframe instead of iframe itself
+    if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+      try {
+        // This will throw an exception if access to iframe is blocked
+        // due to cross-origin restrictions
+        styleTarget = styleTarget.contentDocument.head;
+      } catch (e) {
+        // istanbul ignore next
+        styleTarget = null;
+      }
+    }
+    memo[target] = styleTarget;
+  }
+  return memo[target];
+}
+
+/* istanbul ignore next  */
+function insertBySelector(insert, style) {
+  var target = getTarget(insert);
+  if (!target) {
+    throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");
+  }
+  target.appendChild(style);
+}
+module.exports = insertBySelector;
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/runtime/insertStyleElement.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/insertStyleElement.js ***!
+  \**********************************************************************/
+/***/ ((module) => {
+
+
+
+/* istanbul ignore next  */
+function insertStyleElement(options) {
+  var element = document.createElement("style");
+  options.setAttributes(element, options.attributes);
+  options.insert(element, options.options);
+  return element;
+}
+module.exports = insertStyleElement;
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js ***!
+  \**********************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+
+/* istanbul ignore next  */
+function setAttributesWithoutAttributes(styleElement) {
+  var nonce =  true ? __webpack_require__.nc : 0;
+  if (nonce) {
+    styleElement.setAttribute("nonce", nonce);
+  }
+}
+module.exports = setAttributesWithoutAttributes;
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/runtime/styleDomAPI.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/styleDomAPI.js ***!
+  \***************************************************************/
+/***/ ((module) => {
+
+
+
+/* istanbul ignore next  */
+function apply(styleElement, options, obj) {
+  var css = "";
+  if (obj.supports) {
+    css += "@supports (".concat(obj.supports, ") {");
+  }
+  if (obj.media) {
+    css += "@media ".concat(obj.media, " {");
+  }
+  var needLayer = typeof obj.layer !== "undefined";
+  if (needLayer) {
+    css += "@layer".concat(obj.layer.length > 0 ? " ".concat(obj.layer) : "", " {");
+  }
+  css += obj.css;
+  if (needLayer) {
+    css += "}";
+  }
+  if (obj.media) {
+    css += "}";
+  }
+  if (obj.supports) {
+    css += "}";
+  }
+  var sourceMap = obj.sourceMap;
+  if (sourceMap && typeof btoa !== "undefined") {
+    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
+  }
+
+  // For old IE
+  /* istanbul ignore if  */
+  options.styleTagTransform(css, styleElement, options.options);
+}
+function removeStyleElement(styleElement) {
+  // istanbul ignore if
+  if (styleElement.parentNode === null) {
+    return false;
+  }
+  styleElement.parentNode.removeChild(styleElement);
+}
+
+/* istanbul ignore next  */
+function domAPI(options) {
+  if (typeof document === "undefined") {
+    return {
+      update: function update() {},
+      remove: function remove() {}
+    };
+  }
+  var styleElement = options.insertStyleElement(options);
+  return {
+    update: function update(obj) {
+      apply(styleElement, options, obj);
+    },
+    remove: function remove() {
+      removeStyleElement(styleElement);
+    }
+  };
+}
+module.exports = domAPI;
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/runtime/styleTagTransform.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/styleTagTransform.js ***!
+  \*********************************************************************/
+/***/ ((module) => {
+
+
+
+/* istanbul ignore next  */
+function styleTagTransform(css, styleElement) {
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css;
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild);
+    }
+    styleElement.appendChild(document.createTextNode(css));
+  }
+}
+module.exports = styleTagTransform;
+
+/***/ }),
+
 /***/ "./node_modules/tslib/tslib.es6.mjs":
 /*!******************************************!*\
   !*** ./node_modules/tslib/tslib.es6.mjs ***!
@@ -80043,7 +81654,47 @@ function __rewriteRelativeImportExtension(path, preserveJsx) {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/styleDomAPI.js */ "./node_modules/style-loader/dist/runtime/styleDomAPI.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/insertBySelector.js */ "./node_modules/style-loader/dist/runtime/insertBySelector.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/insertStyleElement.js */ "./node_modules/style-loader/dist/runtime/insertStyleElement.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_App_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../node_modules/css-loader/dist/cjs.js!./App.css */ "./node_modules/css-loader/dist/cjs.js!./src/App.css");
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_App_css__WEBPACK_IMPORTED_MODULE_6__["default"], options);
+
+
+
+
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_App_css__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_App_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_App_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
 
 
 /***/ }),
@@ -80144,7 +81795,47 @@ var App = /** @class */ (function (_super) {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/styleDomAPI.js */ "./node_modules/style-loader/dist/runtime/styleDomAPI.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/insertBySelector.js */ "./node_modules/style-loader/dist/runtime/insertBySelector.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/insertStyleElement.js */ "./node_modules/style-loader/dist/runtime/insertStyleElement.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_Login_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../node_modules/css-loader/dist/cjs.js!./Login.css */ "./node_modules/css-loader/dist/cjs.js!./src/components/Login.css");
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_Login_css__WEBPACK_IMPORTED_MODULE_6__["default"], options);
+
+
+
+
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_Login_css__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_Login_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_Login_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
 
 
 /***/ }),
@@ -80298,7 +81989,47 @@ var Login = /** @class */ (function (_super) {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/styleDomAPI.js */ "./node_modules/style-loader/dist/runtime/styleDomAPI.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/insertBySelector.js */ "./node_modules/style-loader/dist/runtime/insertBySelector.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/insertStyleElement.js */ "./node_modules/style-loader/dist/runtime/insertStyleElement.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_index_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../node_modules/css-loader/dist/cjs.js!./index.css */ "./node_modules/css-loader/dist/cjs.js!./src/index.css");
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_index_css__WEBPACK_IMPORTED_MODULE_6__["default"], options);
+
+
+
+
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_index_css__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_index_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_index_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
 
 
 /***/ })
@@ -80394,6 +82125,11 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/nonce */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nc = undefined;
+/******/ 	})();
+/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
@@ -80411,10 +82147,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var firebase_firestore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! firebase/firestore */ "./node_modules/firebase/firestore/dist/esm/index.esm.js");
 /* harmony import */ var firebase_storage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! firebase/storage */ "./node_modules/firebase/storage/dist/esm/index.esm.js");
 /* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! firebase/auth */ "./node_modules/firebase/auth/dist/esm/index.esm.js");
-/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./App */ "./src/App.tsx");
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./index.css */ "./src/index.css");
+/* harmony import */ var firebase_functions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! firebase/functions */ "./node_modules/firebase/functions/dist/esm/index.esm.js");
+/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./App */ "./src/App.tsx");
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./index.css */ "./src/index.css");
 
 // Import the functions you need from the SDKs you need
+
 
 
 
@@ -80429,7 +82167,7 @@ __webpack_require__.r(__webpack_exports__);
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 var firebaseConfig = {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    apiKey: "AIzaSyADvNFOrTIoF9_rZvAO9LWaW_05q-qqyvw",
     authDomain: "mountainxifu.firebaseapp.com",
     projectId: "mountainxifu",
     storageBucket: "mountainxifu.firebasestorage.app",
@@ -80443,11 +82181,19 @@ var analytics = (0,firebase_analytics__WEBPACK_IMPORTED_MODULE_4__.getAnalytics)
 var db = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_5__.getFirestore)(app);
 var storage = (0,firebase_storage__WEBPACK_IMPORTED_MODULE_6__.getStorage)(app);
 var auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_7__.getAuth)(app);
+var functions = (0,firebase_functions__WEBPACK_IMPORTED_MODULE_8__.getFunctions)(app);
+if (true) {
+    console.log('Using Firebase emulators');
+    (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_5__.connectFirestoreEmulator)(db, 'localhost', 8081);
+    (0,firebase_auth__WEBPACK_IMPORTED_MODULE_7__.connectAuthEmulator)(auth, 'http://localhost:9099');
+    (0,firebase_storage__WEBPACK_IMPORTED_MODULE_6__.connectStorageEmulator)(storage, 'localhost', 9199);
+    (0,firebase_functions__WEBPACK_IMPORTED_MODULE_8__.connectFunctionsEmulator)(functions, 'localhost', 5001);
+}
 var root = react_dom_client__WEBPACK_IMPORTED_MODULE_2__.createRoot(document.getElementById('root'));
-root.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().StrictMode), { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_App__WEBPACK_IMPORTED_MODULE_8__["default"], {}) }));
+root.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().StrictMode), { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_App__WEBPACK_IMPORTED_MODULE_9__["default"], {}) }));
 
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=main.07f24c106c3bf715f8fb.js.map
+//# sourceMappingURL=main.beccbb39a8eb68b7b390.js.map

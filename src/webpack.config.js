@@ -6,8 +6,11 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const Dotenv = require('dotenv-webpack');
+
+
 const info = {
-  TITLE: 'Firebase React App'
+  TITLE: 'Mountain Xifu - Roleplay Chatbot'
 }
 
 const config = {
@@ -46,7 +49,7 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          'style-loader',
           'css-loader'
         ]
       },
@@ -68,27 +71,36 @@ const config = {
   },
 
   output: {
-    filename: '[name].[chunkhash].js',
+    filename: '[name].[hash].js', // chunkhash
     path: path.resolve(__dirname, '../public'),
     publicPath: '/'
   },
 
   plugins: [
     new ProgressBarPlugin({ width: 80 }),
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!firebase-debug*', '!__/**'],
+    }),
     // Using the older format for CopyWebpackPlugin (array format)
     new CopyWebpackPlugin([
-      { from: './img', to: 'img' }
+      { from: './src/img', to: 'img' }
     ], {
       ignore: ['.gitkeep']
     }),
-    new MiniCssExtractPlugin({ filename: '[contenthash].css' }),
+    new MiniCssExtractPlugin({
+      filename: '[contenthash].css',
+    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       title: info.TITLE,
       chunks: ['main'],
       template: './src/index.html',
-      templateParameters: { TITLE: info.TITLE }
+      templateParameters: { TITLE: info.TITLE },
+      inject: true
+    }),
+    new Dotenv({
+      path: './.env.local', // Path to .env file
+      systemvars: true // Load all system variables as well
     }),
   ],
 }
