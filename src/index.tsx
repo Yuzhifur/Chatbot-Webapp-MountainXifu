@@ -33,7 +33,7 @@ const storage = getStorage(app);
 const auth = getAuth(app);
 const functions = getFunctions(app);
 
-if (process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost') {
+if (window.location.hostname === 'localhost') {
   console.log('Using Firebase emulators');
   connectFirestoreEmulator(db, 'localhost', 8081);
   connectAuthEmulator(auth, 'http://localhost:9099');

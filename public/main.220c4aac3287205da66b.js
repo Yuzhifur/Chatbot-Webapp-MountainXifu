@@ -82570,7 +82570,7 @@ var db = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_5__.getFirestore)(app);
 var storage = (0,firebase_storage__WEBPACK_IMPORTED_MODULE_6__.getStorage)(app);
 var auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_7__.getAuth)(app);
 var functions = (0,firebase_functions__WEBPACK_IMPORTED_MODULE_8__.getFunctions)(app);
-if (true) {
+if (window.location.hostname === 'localhost') {
     console.log('Using Firebase emulators');
     (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_5__.connectFirestoreEmulator)(db, 'localhost', 8081);
     (0,firebase_auth__WEBPACK_IMPORTED_MODULE_7__.connectAuthEmulator)(auth, 'http://localhost:9099');
@@ -82584,4 +82584,4 @@ root.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)((react__WEBPA
 
 /******/ })()
 ;
-//# sourceMappingURL=main.e5b9e6a92c29a46d3b78.js.map
+//# sourceMappingURL=main.220c4aac3287205da66b.js.map

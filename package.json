@@ -17,7 +17,8 @@
     "emulate": "firebase emulators:start",
     "emulate:all": "firebase emulators:start --import=./emulator-data --export-on-exit",
     "test": "ts-mocha -p tsconfig.json src/**/*_test.{ts,tsx} --require ignore-styles",
-    "start": "webpack-dev-server --config ./src/webpack.config.js"
+    "start": "webpack-dev-server --config ./src/webpack.config.js",
+    "deploy": "npm run build && firebase deploy"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
