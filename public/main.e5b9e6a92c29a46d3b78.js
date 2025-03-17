@@ -34093,6 +34093,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.login-container {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-bottom: 15px;
 }
 
 .login-button:hover {
@@ -34112,7 +34113,44 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.login-container {
   background-color: #fce8e6;
   padding: 10px;
   border-radius: 4px;
-}`, "",{"version":3,"sources":["webpack://./src/components/Login.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,uBAAuB;EACvB,mBAAmB;EACnB,iBAAiB;EACjB,yBAAyB;AAC3B;;AAEA;EACE,WAAW;EACX,gBAAgB;EAChB,aAAa;EACb,uBAAuB;EACvB,kBAAkB;EAClB,wCAAwC;AAC1C;;AAEA;EACE,eAAe;EACf,iBAAiB;EACjB,kBAAkB;EAClB,mBAAmB;EACnB,WAAW;AACb;;AAEA;EACE,eAAe;EACf,kBAAkB;EAClB,mBAAmB;EACnB,WAAW;AACb;;AAEA;EACE,aAAa;EACb,sBAAsB;AACxB;;AAEA;EACE,mBAAmB;AACrB;;AAEA;EACE,cAAc;EACd,kBAAkB;EAClB,gBAAgB;EAChB,WAAW;AACb;;AAEA;EACE,WAAW;EACX,aAAa;EACb,sBAAsB;EACtB,kBAAkB;EAClB,eAAe;AACjB;;AAEA;EACE,kBAAkB;EAClB,aAAa;AACf;;AAEA;EACE,aAAa;EACb,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,eAAe;EACf,gBAAgB;EAChB,eAAe;EACf,iCAAiC;AACnC;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,yBAAyB;EACzB,mBAAmB;AACrB;;AAEA;EACE,cAAc;EACd,mBAAmB;EACnB,kBAAkB;EAClB,eAAe;EACf,yBAAyB;EACzB,aAAa;EACb,kBAAkB;AACpB","sourcesContent":[".login-container {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  min-height: 100vh;\r\n  background-color: #f7f7f7;\r\n}\r\n\r\n.login-form-wrapper {\r\n  width: 100%;\r\n  max-width: 400px;\r\n  padding: 40px;\r\n  background-color: white;\r\n  border-radius: 8px;\r\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.login-title {\r\n  font-size: 28px;\r\n  font-weight: bold;\r\n  text-align: center;\r\n  margin-bottom: 10px;\r\n  color: #333;\r\n}\r\n\r\n.login-subtitle {\r\n  font-size: 18px;\r\n  text-align: center;\r\n  margin-bottom: 30px;\r\n  color: #666;\r\n}\r\n\r\n.login-form {\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\n.login-field {\r\n  margin-bottom: 20px;\r\n}\r\n\r\n.login-field label {\r\n  display: block;\r\n  margin-bottom: 5px;\r\n  font-weight: 500;\r\n  color: #555;\r\n}\r\n\r\n.login-field input {\r\n  width: 100%;\r\n  padding: 10px;\r\n  border: 1px solid #ddd;\r\n  border-radius: 4px;\r\n  font-size: 16px;\r\n}\r\n\r\n.login-field input:focus {\r\n  border-color: #666;\r\n  outline: none;\r\n}\r\n\r\n.login-button {\r\n  padding: 12px;\r\n  background-color: #4285f4;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 4px;\r\n  font-size: 16px;\r\n  font-weight: 500;\r\n  cursor: pointer;\r\n  transition: background-color 0.2s;\r\n}\r\n\r\n.login-button:hover {\r\n  background-color: #3367d6;\r\n}\r\n\r\n.login-button:disabled {\r\n  background-color: #b3c6e6;\r\n  cursor: not-allowed;\r\n}\r\n\r\n.login-error {\r\n  color: #d93025;\r\n  margin-bottom: 20px;\r\n  text-align: center;\r\n  font-size: 14px;\r\n  background-color: #fce8e6;\r\n  padding: 10px;\r\n  border-radius: 4px;\r\n}"],"sourceRoot":""}]);
+}
+
+.login-success {
+  color: #0f9d58;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 14px;
+  background-color: #e6f4ea;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.login-links {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text-button {
+  background: none;
+  border: none;
+  color: #4285f4;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 5px;
+  margin: 5px 0;
+  text-decoration: underline;
+}
+
+.text-button:hover {
+  color: #3367d6;
+}
+
+.text-button:disabled {
+  color: #b3c6e6;
+  cursor: not-allowed;
+}`, "",{"version":3,"sources":["webpack://./src/components/Login.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,uBAAuB;EACvB,mBAAmB;EACnB,iBAAiB;EACjB,yBAAyB;AAC3B;;AAEA;EACE,WAAW;EACX,gBAAgB;EAChB,aAAa;EACb,uBAAuB;EACvB,kBAAkB;EAClB,wCAAwC;AAC1C;;AAEA;EACE,eAAe;EACf,iBAAiB;EACjB,kBAAkB;EAClB,mBAAmB;EACnB,WAAW;AACb;;AAEA;EACE,eAAe;EACf,kBAAkB;EAClB,mBAAmB;EACnB,WAAW;AACb;;AAEA;EACE,aAAa;EACb,sBAAsB;AACxB;;AAEA;EACE,mBAAmB;AACrB;;AAEA;EACE,cAAc;EACd,kBAAkB;EAClB,gBAAgB;EAChB,WAAW;AACb;;AAEA;EACE,WAAW;EACX,aAAa;EACb,sBAAsB;EACtB,kBAAkB;EAClB,eAAe;AACjB;;AAEA;EACE,kBAAkB;EAClB,aAAa;AACf;;AAEA;EACE,aAAa;EACb,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,eAAe;EACf,gBAAgB;EAChB,eAAe;EACf,iCAAiC;EACjC,mBAAmB;AACrB;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,yBAAyB;EACzB,mBAAmB;AACrB;;AAEA;EACE,cAAc;EACd,mBAAmB;EACnB,kBAAkB;EAClB,eAAe;EACf,yBAAyB;EACzB,aAAa;EACb,kBAAkB;AACpB;;AAEA;EACE,cAAc;EACd,mBAAmB;EACnB,kBAAkB;EAClB,eAAe;EACf,yBAAyB;EACzB,aAAa;EACb,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,aAAa;EACb,sBAAsB;EACtB,mBAAmB;AACrB;;AAEA;EACE,gBAAgB;EAChB,YAAY;EACZ,cAAc;EACd,eAAe;EACf,eAAe;EACf,YAAY;EACZ,aAAa;EACb,0BAA0B;AAC5B;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,cAAc;EACd,mBAAmB;AACrB","sourcesContent":[".login-container {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  min-height: 100vh;\r\n  background-color: #f7f7f7;\r\n}\r\n\r\n.login-form-wrapper {\r\n  width: 100%;\r\n  max-width: 400px;\r\n  padding: 40px;\r\n  background-color: white;\r\n  border-radius: 8px;\r\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.login-title {\r\n  font-size: 28px;\r\n  font-weight: bold;\r\n  text-align: center;\r\n  margin-bottom: 10px;\r\n  color: #333;\r\n}\r\n\r\n.login-subtitle {\r\n  font-size: 18px;\r\n  text-align: center;\r\n  margin-bottom: 30px;\r\n  color: #666;\r\n}\r\n\r\n.login-form {\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\n.login-field {\r\n  margin-bottom: 20px;\r\n}\r\n\r\n.login-field label {\r\n  display: block;\r\n  margin-bottom: 5px;\r\n  font-weight: 500;\r\n  color: #555;\r\n}\r\n\r\n.login-field input {\r\n  width: 100%;\r\n  padding: 10px;\r\n  border: 1px solid #ddd;\r\n  border-radius: 4px;\r\n  font-size: 16px;\r\n}\r\n\r\n.login-field input:focus {\r\n  border-color: #666;\r\n  outline: none;\r\n}\r\n\r\n.login-button {\r\n  padding: 12px;\r\n  background-color: #4285f4;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 4px;\r\n  font-size: 16px;\r\n  font-weight: 500;\r\n  cursor: pointer;\r\n  transition: background-color 0.2s;\r\n  margin-bottom: 15px;\r\n}\r\n\r\n.login-button:hover {\r\n  background-color: #3367d6;\r\n}\r\n\r\n.login-button:disabled {\r\n  background-color: #b3c6e6;\r\n  cursor: not-allowed;\r\n}\r\n\r\n.login-error {\r\n  color: #d93025;\r\n  margin-bottom: 20px;\r\n  text-align: center;\r\n  font-size: 14px;\r\n  background-color: #fce8e6;\r\n  padding: 10px;\r\n  border-radius: 4px;\r\n}\r\n\r\n.login-success {\r\n  color: #0f9d58;\r\n  margin-bottom: 20px;\r\n  text-align: center;\r\n  font-size: 14px;\r\n  background-color: #e6f4ea;\r\n  padding: 10px;\r\n  border-radius: 4px;\r\n}\r\n\r\n.login-links {\r\n  margin-top: 15px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n}\r\n\r\n.text-button {\r\n  background: none;\r\n  border: none;\r\n  color: #4285f4;\r\n  font-size: 14px;\r\n  cursor: pointer;\r\n  padding: 5px;\r\n  margin: 5px 0;\r\n  text-decoration: underline;\r\n}\r\n\r\n.text-button:hover {\r\n  color: #3367d6;\r\n}\r\n\r\n.text-button:disabled {\r\n  color: #b3c6e6;\r\n  cursor: not-allowed;\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -81715,7 +81753,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! firebase/auth */ "./node_modules/firebase/auth/dist/esm/index.esm.js");
 /* harmony import */ var _components_Login__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Login */ "./src/components/Login.tsx");
-/* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./App.css */ "./src/App.css");
+/* harmony import */ var _components_CreateAccount__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/CreateAccount */ "./src/components/CreateAccount.tsx");
+/* harmony import */ var _components_ResetPassword__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/ResetPassword */ "./src/components/ResetPassword.tsx");
+/* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./App.css */ "./src/App.css");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -81747,19 +81787,31 @@ var __assign = (undefined && undefined.__assign) || function () {
 
 
 
+
+
 var App = /** @class */ (function (_super) {
     __extends(App, _super);
     function App(props) {
         var _this = _super.call(this, props) || this;
+        _this.switchToLogin = function () {
+            _this.setState({ authView: 'login' });
+        };
+        _this.switchToCreateAccount = function () {
+            _this.setState({ authView: 'createAccount' });
+        };
+        _this.switchToResetPassword = function () {
+            _this.setState({ authView: 'resetPassword' });
+        };
         _this.state = {
             user: null,
-            loading: true
+            loading: true,
+            authView: 'login'
         };
         return _this;
     }
     App.prototype.componentDidMount = function () {
         var _this = this;
-        // Hide firebase welcome content when reac app mounts
+        // Hide firebase welcome content when react app mounts
         var messageEl = document.getElementById('message');
         var loadEl = document.getElementById('load');
         if (messageEl)
@@ -81774,13 +81826,25 @@ var App = /** @class */ (function (_super) {
             });
         });
     };
+    App.prototype.renderAuthContent = function () {
+        var authView = this.state.authView;
+        switch (authView) {
+            case 'createAccount':
+                return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_CreateAccount__WEBPACK_IMPORTED_MODULE_4__.CreateAccount, { switchToLogin: this.switchToLogin });
+            case 'resetPassword':
+                return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_ResetPassword__WEBPACK_IMPORTED_MODULE_5__.ResetPassword, { switchToLogin: this.switchToLogin });
+            case 'login':
+            default:
+                return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_Login__WEBPACK_IMPORTED_MODULE_3__.Login, { switchToCreateAccount: this.switchToCreateAccount, switchToResetPassword: this.switchToResetPassword });
+        }
+    };
     App.prototype.renderContent = function () {
         var _a = this.state, user = _a.user, loading = _a.loading;
         if (loading) {
             return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "loading" }, { children: "Loading..." }));
         }
         if (!user) {
-            return (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_Login__WEBPACK_IMPORTED_MODULE_3__.Login, {});
+            return this.renderAuthContent();
         }
         return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "dashboard" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("h1", { children: ["Welcome, ", user.email] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { children: "Main dashboard content will go here." }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ onClick: function () { return (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.getAuth)().signOut(); }, className: "logout-button" }, { children: "Sign Out" }))] })));
     };
@@ -81791,6 +81855,170 @@ var App = /** @class */ (function (_super) {
 }(react__WEBPACK_IMPORTED_MODULE_1__.Component));
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
+
+
+/***/ }),
+
+/***/ "./src/components/CreateAccount.tsx":
+/*!******************************************!*\
+  !*** ./src/components/CreateAccount.tsx ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CreateAccount: () => (/* binding */ CreateAccount)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! firebase/auth */ "./node_modules/firebase/auth/dist/esm/index.esm.js");
+/* harmony import */ var _Login_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Login.css */ "./src/components/Login.css");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+ // Reusing the same CSS
+var CreateAccount = /** @class */ (function (_super) {
+    __extends(CreateAccount, _super);
+    function CreateAccount(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleEmailChange = function (e) {
+            _this.setState({ email: e.target.value });
+        };
+        _this.handlePasswordChange = function (e) {
+            _this.setState({ password: e.target.value });
+        };
+        _this.handleConfirmPasswordChange = function (e) {
+            _this.setState({ confirmPassword: e.target.value });
+        };
+        _this.handleSubmit = function (e) { return __awaiter(_this, void 0, void 0, function () {
+            var _a, email, password, confirmPassword, auth, error_1, errorMessage;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        e.preventDefault();
+                        _a = this.state, email = _a.email, password = _a.password, confirmPassword = _a.confirmPassword;
+                        // Basic validation
+                        if (!email || !password || !confirmPassword) {
+                            this.setState({ error: 'Please fill in all fields' });
+                            return [2 /*return*/];
+                        }
+                        if (password !== confirmPassword) {
+                            this.setState({ error: 'Passwords do not match' });
+                            return [2 /*return*/];
+                        }
+                        if (password.length < 6) {
+                            this.setState({ error: 'Password must be at least 6 characters' });
+                            return [2 /*return*/];
+                        }
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        this.setState({ loading: true, error: null });
+                        auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.getAuth)();
+                        return [4 /*yield*/, (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.createUserWithEmailAndPassword)(auth, email, password)];
+                    case 2:
+                        _b.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _b.sent();
+                        console.error('Account creation error:', error_1);
+                        errorMessage = 'Failed to create account';
+                        // Handle specific Firebase errors
+                        if (error_1.code === 'auth/email-already-in-use') {
+                            errorMessage = 'Email is already in use';
+                        }
+                        else if (error_1.code === 'auth/invalid-email') {
+                            errorMessage = 'Invalid email address';
+                        }
+                        this.setState({
+                            error: errorMessage,
+                            loading: false
+                        });
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.state = {
+            email: '',
+            password: '',
+            confirmPassword: '',
+            error: null,
+            loading: false
+        };
+        return _this;
+    }
+    CreateAccount.prototype.render = function () {
+        var _a = this.state, email = _a.email, password = _a.password, confirmPassword = _a.confirmPassword, error = _a.error, loading = _a.loading;
+        var switchToLogin = this.props.switchToLogin;
+        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-container" }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-form-wrapper" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", __assign({ className: "login-title" }, { children: "Mountain Xifu" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h2", __assign({ className: "login-subtitle" }, { children: "Create Account" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("form", __assign({ className: "login-form", onSubmit: this.handleSubmit }, { children: [error && (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-error" }, { children: error })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-field" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", __assign({ htmlFor: "email" }, { children: "Email" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "email", id: "email", value: email, onChange: this.handleEmailChange, disabled: loading })] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-field" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", __assign({ htmlFor: "password" }, { children: "Password" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "password", id: "password", value: password, onChange: this.handlePasswordChange, disabled: loading })] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-field" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", __assign({ htmlFor: "confirmPassword" }, { children: "Confirm Password" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "password", id: "confirmPassword", value: confirmPassword, onChange: this.handleConfirmPasswordChange, disabled: loading })] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ type: "submit", className: "login-button", disabled: loading }, { children: loading ? 'Creating Account...' : 'Create Account' })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-links" }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ type: "button", className: "text-button", onClick: switchToLogin, disabled: loading }, { children: "Already have an account? Login instead" })) }))] }))] })) })));
+    };
+    return CreateAccount;
+}(react__WEBPACK_IMPORTED_MODULE_1__.Component));
+
 
 
 /***/ }),
@@ -81980,9 +82208,162 @@ var Login = /** @class */ (function (_super) {
     }
     Login.prototype.render = function () {
         var _a = this.state, email = _a.email, password = _a.password, error = _a.error, loading = _a.loading;
-        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-container" }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-form-wrapper" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", __assign({ className: "login-title" }, { children: "Mountain Xifu" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h2", __assign({ className: "login-subtitle" }, { children: "Roleplay Chatbot" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("form", __assign({ className: "login-form", onSubmit: this.handleSubmit }, { children: [error && (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-error" }, { children: error })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-field" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", __assign({ htmlFor: "email" }, { children: "Email" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "email", id: "email", value: email, onChange: this.handleEmailChange, disabled: loading })] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-field" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", __assign({ htmlFor: "password" }, { children: "Password" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "password", id: "password", value: password, onChange: this.handlePasswordChange, disabled: loading })] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ type: "submit", className: "login-button", disabled: loading }, { children: loading ? 'Logging in...' : 'Login' }))] }))] })) })));
+        var _b = this.props, switchToCreateAccount = _b.switchToCreateAccount, switchToResetPassword = _b.switchToResetPassword;
+        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-container" }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-form-wrapper" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", __assign({ className: "login-title" }, { children: "Mountain Xifu" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h2", __assign({ className: "login-subtitle" }, { children: "Roleplay Chatbot" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("form", __assign({ className: "login-form", onSubmit: this.handleSubmit }, { children: [error && (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-error" }, { children: error })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-field" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", __assign({ htmlFor: "email" }, { children: "Email" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "email", id: "email", value: email, onChange: this.handleEmailChange, disabled: loading })] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-field" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", __assign({ htmlFor: "password" }, { children: "Password" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "password", id: "password", value: password, onChange: this.handlePasswordChange, disabled: loading })] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ type: "submit", className: "login-button", disabled: loading }, { children: loading ? 'Logging in...' : 'Login' })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-links" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ type: "button", className: "text-button", onClick: switchToCreateAccount, disabled: loading }, { children: "Create a new account" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ type: "button", className: "text-button", onClick: switchToResetPassword, disabled: loading }, { children: "Forgot password?" }))] }))] }))] })) })));
     };
     return Login;
+}(react__WEBPACK_IMPORTED_MODULE_1__.Component));
+
+
+
+/***/ }),
+
+/***/ "./src/components/ResetPassword.tsx":
+/*!******************************************!*\
+  !*** ./src/components/ResetPassword.tsx ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ResetPassword: () => (/* binding */ ResetPassword)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! firebase/auth */ "./node_modules/firebase/auth/dist/esm/index.esm.js");
+/* harmony import */ var _Login_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Login.css */ "./src/components/Login.css");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+ // Reusing the same CSS
+var ResetPassword = /** @class */ (function (_super) {
+    __extends(ResetPassword, _super);
+    function ResetPassword(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleEmailChange = function (e) {
+            _this.setState({ email: e.target.value });
+        };
+        _this.handleSubmit = function (e) { return __awaiter(_this, void 0, void 0, function () {
+            var email, auth, error_1, errorMessage;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        e.preventDefault();
+                        email = this.state.email;
+                        if (!email) {
+                            this.setState({ error: 'Please enter your email address' });
+                            return [2 /*return*/];
+                        }
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        this.setState({ loading: true, error: null, success: null });
+                        auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.getAuth)();
+                        return [4 /*yield*/, (0,firebase_auth__WEBPACK_IMPORTED_MODULE_2__.sendPasswordResetEmail)(auth, email)];
+                    case 2:
+                        _a.sent();
+                        this.setState({
+                            success: 'Password reset email sent! Check your inbox.',
+                            loading: false
+                        });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _a.sent();
+                        console.error('Reset password error:', error_1);
+                        errorMessage = 'Failed to send reset email';
+                        // Handle specific Firebase errors
+                        if (error_1.code === 'auth/user-not-found') {
+                            errorMessage = 'No account found with this email';
+                        }
+                        else if (error_1.code === 'auth/invalid-email') {
+                            errorMessage = 'Invalid email address';
+                        }
+                        this.setState({
+                            error: errorMessage,
+                            loading: false
+                        });
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.state = {
+            email: '',
+            error: null,
+            success: null,
+            loading: false
+        };
+        return _this;
+    }
+    ResetPassword.prototype.render = function () {
+        var _a = this.state, email = _a.email, error = _a.error, success = _a.success, loading = _a.loading;
+        var switchToLogin = this.props.switchToLogin;
+        return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-container" }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-form-wrapper" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", __assign({ className: "login-title" }, { children: "Mountain Xifu" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h2", __assign({ className: "login-subtitle" }, { children: "Reset Password" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("form", __assign({ className: "login-form", onSubmit: this.handleSubmit }, { children: [error && (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-error" }, { children: error })), success && (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-success" }, { children: success })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", __assign({ className: "login-field" }, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", __assign({ htmlFor: "email" }, { children: "Email" })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "email", id: "email", value: email, onChange: this.handleEmailChange, disabled: loading })] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ type: "submit", className: "login-button", disabled: loading }, { children: loading ? 'Sending...' : 'Send Reset Email' })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", __assign({ className: "login-links" }, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", __assign({ type: "button", className: "text-button", onClick: switchToLogin, disabled: loading }, { children: "Back to Login" })) }))] }))] })) })));
+    };
+    return ResetPassword;
 }(react__WEBPACK_IMPORTED_MODULE_1__.Component));
 
 
@@ -82203,4 +82584,4 @@ root.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)((react__WEBPA
 
 /******/ })()
 ;
-//# sourceMappingURL=main.7befd34a71907955eb1f.js.map
+//# sourceMappingURL=main.e5b9e6a92c29a46d3b78.js.map

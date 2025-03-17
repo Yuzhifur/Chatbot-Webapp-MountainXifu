@@ -2,7 +2,10 @@ import React, { Component, FormEvent, ChangeEvent } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import './Login.css';
 
-type LoginProps = {};
+type LoginProps = {
+  switchToCreateAccount: () => void;
+  switchToResetPassword: () => void;
+};
 
 type LoginState = {
   email: string;
@@ -57,6 +60,7 @@ export class Login extends Component<LoginProps, LoginState> {
 
   render() {
     const { email, password, error, loading } = this.state;
+    const { switchToCreateAccount, switchToResetPassword } = this.props;
 
     return (
       <div className="login-container">
@@ -96,6 +100,25 @@ export class Login extends Component<LoginProps, LoginState> {
             >
               {loading ? 'Logging in...' : 'Login'}
             </button>
+
+            <div className="login-links">
+              <button
+                type="button"
+                className="text-button"
+                onClick={switchToCreateAccount}
+                disabled={loading}
+              >
+                Create a new account
+              </button>
+              <button
+                type="button"
+                className="text-button"
+                onClick={switchToResetPassword}
+                disabled={loading}
+              >
+                Forgot password?
+              </button>
+            </div>
           </form>
         </div>
       </div>

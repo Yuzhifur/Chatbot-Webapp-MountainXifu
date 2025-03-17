@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { Login } from './components/Login';
+import { CreateAccount } from './components/CreateAccount';
+import { ResetPassword } from './components/ResetPassword';
 import './App.css';
 
 type AppProps = {};
@@ -8,6 +10,7 @@ type AppProps = {};
 type AppState = {
   user: User | null;
   loading: boolean;
+  authView: 'login' | 'createAccount' | 'resetPassword';
 };
 
 export class App extends Component<AppProps, AppState> {
@@ -16,12 +19,13 @@ export class App extends Component<AppProps, AppState> {
 
     this.state = {
       user: null,
-      loading: true
+      loading: true,
+      authView: 'login'
     };
   }
 
   componentDidMount() {
-    // Hide firebase welcome content when reac app mounts
+    // Hide firebase welcome content when react app mounts
     const messageEl = document.getElementById('message');
     const loadEl = document.getElementById('load');
 
@@ -37,6 +41,35 @@ export class App extends Component<AppProps, AppState> {
     });
   }
 
+  switchToLogin = () => {
+    this.setState({ authView: 'login' });
+  };
+
+  switchToCreateAccount = () => {
+    this.setState({ authView: 'createAccount' });
+  };
+
+  switchToResetPassword = () => {
+    this.setState({ authView: 'resetPassword' });
+  };
+
+  renderAuthContent() {
+    const { authView } = this.state;
+
+    switch (authView) {
+      case 'createAccount':
+        return <CreateAccount switchToLogin={this.switchToLogin} />;
+      case 'resetPassword':
+        return <ResetPassword switchToLogin={this.switchToLogin} />;
+      case 'login':
+      default:
+        return <Login
+          switchToCreateAccount={this.switchToCreateAccount}
+          switchToResetPassword={this.switchToResetPassword}
+        />;
+    }
+  }
+
   renderContent() {
     const { user, loading } = this.state;
 
@@ -45,7 +78,7 @@ export class App extends Component<AppProps, AppState> {
     }
 
     if (!user) {
-      return <Login />;
+      return this.renderAuthContent();
     }
 
     return (
