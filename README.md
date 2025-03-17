@@ -1,4 +1,4 @@
-# Mountain Xifu - Roleplay Chatbot Webapp V0.1.2
+# Mountain Xifu - Roleplay Chatbot Webapp V0.1.3
 
 A roleplay chatbot web application based on Firebase, React, and language model APIs.
 
@@ -15,6 +15,7 @@ This project is a React application with Firebase integration for authentication
    ```
 3. Create a `.env.local` file in the project root:
    - Fill in your Firebase project credentials as NEXT_PUBLIC_FIREBASE_API_KEY
+   - Set development/production mode with NODE_ENV=production or NODE_ENV=development
 
 4. Start the development server:
    ```bash
