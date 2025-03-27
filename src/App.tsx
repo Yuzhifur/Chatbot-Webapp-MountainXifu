@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { Login } from './components/Login';
 import { CreateAccount } from './components/CreateAccount';
 import { ResetPassword } from './components/ResetPassword';
+import Sidebar from './components/Sidebar';
 import './App.css';
 
 type AppProps = {};
@@ -11,6 +12,7 @@ type AppState = {
   user: User | null;
   loading: boolean;
   authView: 'login' | 'createAccount' | 'resetPassword';
+  dashboardContent: 'default' | 'other'; // Can add more content types as needed
 };
 
 export class App extends Component<AppProps, AppState> {
@@ -20,7 +22,8 @@ export class App extends Component<AppProps, AppState> {
     this.state = {
       user: null,
       loading: true,
-      authView: 'login'
+      authView: 'login',
+      dashboardContent: 'default'
     };
   }
 
@@ -53,6 +56,10 @@ export class App extends Component<AppProps, AppState> {
     this.setState({ authView: 'resetPassword' });
   };
 
+  resetDashboard = () => {
+    this.setState({ dashboardContent: 'default' });
+  };
+
   renderAuthContent() {
     const { authView } = this.state;
 
@@ -70,6 +77,28 @@ export class App extends Component<AppProps, AppState> {
     }
   }
 
+  renderDashboardContent() {
+    const { user, dashboardContent } = this.state;
+
+    // Currently only have default content, but can expand this switch statement in the future
+    switch (dashboardContent) {
+      case 'default':
+      default:
+        return (
+          <div className="dashboard">
+            <h1>Welcome, {user?.email}</h1>
+            <p>Main dashboard content will go here.</p>
+            <button
+              onClick={() => getAuth().signOut()}
+              className="logout-button"
+            >
+              Sign Out
+            </button>
+          </div>
+        );
+    }
+  }
+
   renderContent() {
     const { user, loading } = this.state;
 
@@ -82,15 +111,11 @@ export class App extends Component<AppProps, AppState> {
     }
 
     return (
-      <div className="dashboard">
-        <h1>Welcome, {user.email}</h1>
-        <p>Main dashboard content will go here.</p>
-        <button
-          onClick={() => getAuth().signOut()}
-          className="logout-button"
-        >
-          Sign Out
-        </button>
+      <div className="dashboard-container">
+        <Sidebar resetDashboard={this.resetDashboard} />
+        <div className="main-content">
+          {this.renderDashboardContent()}
+        </div>
       </div>
     );
   }

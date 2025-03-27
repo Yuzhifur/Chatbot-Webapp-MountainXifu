@@ -21,6 +21,16 @@ body {
   color: #666;
 }
 
+.dashboard-container {
+  display: flex;
+}
+
+.main-content {
+  margin-left: 250px; /* Same as sidebar width */
+  flex: 1;
+  min-height: 100vh;
+}
+
 .dashboard {
   max-width: 1200px;
   margin: 0 auto;
