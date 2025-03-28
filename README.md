@@ -31,6 +31,7 @@ This project is a React application with Firebase integration for authentication
    ```bash
    firebase emulators:start --only hosting,auth,firestore,functions,storage
    ```
+   Open the emulated hosting in private browsing (with empty browser cache).
 
 7. Deploy to Firebase:
    ```bash
