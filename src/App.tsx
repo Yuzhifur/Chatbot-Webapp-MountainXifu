@@ -44,19 +44,19 @@ export class App extends Component<AppProps, AppState> {
     });
   }
 
-  doSwitchToLogin = () => {
+  switchToLogin = () => {
     this.setState({ authView: 'login' });
   };
 
-  doSwitchToCreateAccount = () => {
+  switchToCreateAccount = () => {
     this.setState({ authView: 'createAccount' });
   };
 
-  doSwitchToResetPassword = () => {
+  switchToResetPassword = () => {
     this.setState({ authView: 'resetPassword' });
   };
 
-  doResetDashboard = () => {
+  resetDashboard = () => {
     this.setState({ dashboardContent: 'default' });
   };
 
@@ -65,14 +65,14 @@ export class App extends Component<AppProps, AppState> {
 
     switch (authView) {
       case 'createAccount':
-        return <CreateAccount doSwitchToLogin={this.doSwitchToLogin} />;
+        return <CreateAccount switchToLogin={this.switchToLogin} />;
       case 'resetPassword':
-        return <ResetPassword doSwitchToLogin={this.doSwitchToLogin} />;
+        return <ResetPassword switchToLogin={this.switchToLogin} />;
       case 'login':
       default:
         return <Login
-          doSwitchToCreateAccount={this.doSwitchToCreateAccount}
-          doSwitchToResetPassword={this.doSwitchToResetPassword}
+          switchToCreateAccount={this.switchToCreateAccount}
+          switchToResetPassword={this.switchToResetPassword}
         />;
     }
   }
@@ -112,7 +112,7 @@ export class App extends Component<AppProps, AppState> {
 
     return (
       <div className="dashboard-container">
-        <Sidebar doResetDashboard={this.doResetDashboard} />
+        <Sidebar resetDashboard={this.resetDashboard} />
         <div className="main-content">
           {this.renderDashboardContent()}
         </div>
